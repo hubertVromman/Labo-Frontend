@@ -1,0 +1,13 @@
+
+<h3>
+  Bienvenue, veuillez choisir votre bibliothèque
+</h3>
+
+@for (bibliotheque of bibliothequeList; track $index) {
+  <div>{{bibliotheque.nom}}           
+
+    <a [routerLink]="['/bibliotheque', bibliotheque.bibliothequeId]">Accéder</a>
+    
+    
+  </div>
+}

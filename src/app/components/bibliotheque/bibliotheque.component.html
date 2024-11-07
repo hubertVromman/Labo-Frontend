@@ -1,0 +1,44 @@
+
+<h3>
+  {{bibliotheque.nom}}
+</h3>
+
+Livres en stock :
+<p-table [value]="bibliotheque.stockLivre"
+  styleClass="p-datatable-striped"
+  [tableStyle]="{ 'min-width': '50%' }"
+  [scrollable]="true" 
+  scrollHeight="90vh" 
+  >
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Titre</th>
+          <th>ISBN</th>
+          <th>Stock location</th>
+          <th>Stock achat</th>
+          <th>Options</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-stocklivre>
+      <tr>
+          <td>{{ stocklivre.livre.titre }}</td>
+          <td>{{ stocklivre.livre.isbn }}</td>
+          <td>{{ stocklivre.stockLocation }}</td>
+          <td>{{ stocklivre.stockAchat }}</td>
+          <td><p-button label="Détails" (onClick)="showDetails(stocklivre.livre.livreId)" /></td>
+      </tr>
+  </ng-template>
+</p-table>
+
+@if (livreDetails) {
+  <p-card [header]="livreDetails.titre" [subheader]="auteurs">
+    <ul>
+      <li> ISBN : {{ livreDetails.isbn }} </li>
+      <li> Date de parution : {{ livreDetails.dateParution }} </li>
+      <li> Genre(s) : {{ livreDetails.genre }} </li>
+      <li> Prix de vente : {{ livreDetails.prixVente }} </li>
+    </ul>
+    <p-button label="Ajouter au panier d'achat" (onClick)="ajouterAuPanier(livreDetails.livreId, 'vente')"></p-button>
+    <p-button label="Ajouter au panier d'emprunt" (onClick)="ajouterAuPanier(livreDetails.livreId, 'pret')"></p-button>
+  </p-card>
+}

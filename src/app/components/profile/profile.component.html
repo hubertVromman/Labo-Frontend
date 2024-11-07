@@ -1,0 +1,11 @@
+<h1>
+  Profile
+</h1>
+@if (user$ | async; as user) {
+  <h2> {{user.prenom}} {{user.nom}}</h2>
+  <p>
+    Role : {{user.role}}
+  </p>
+}
+
+<p-button label="refresh" (onClick)="handleClick()"></p-button>

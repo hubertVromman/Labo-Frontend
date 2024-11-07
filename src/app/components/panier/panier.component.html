@@ -1,0 +1,49 @@
+<h1>Panier</h1>
+
+<h3>
+  Prets
+</h3>
+
+<p-table [value]="listeAchat"
+styleClass="p-datatable-striped"
+[tableStyle]="{ 'min-width': '50%' }"
+[scrollable]="true" 
+scrollHeight="90vh" 
+>
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Titre</th>
+          <th>Quantité</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-achat>
+      <tr>
+          <td>{{ achat[0] | titreFromLivreId | async }}</td>
+          <td>{{ achat[1] }}</td>
+      </tr>
+  </ng-template>
+</p-table>
+
+<h3>
+  Achats
+</h3>
+
+<p-table [value]="listePret"
+styleClass="p-datatable-striped"
+[tableStyle]="{ 'min-width': '50%' }"
+[scrollable]="true" 
+scrollHeight="90vh" 
+>
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Titre</th>
+          <th>Quantité</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-achat>
+      <tr>
+          <td>{{ achat[0] | titreFromLivreId | async }}</td>
+          <td>{{ achat[1] }}</td>
+      </tr>
+  </ng-template>
+</p-table>

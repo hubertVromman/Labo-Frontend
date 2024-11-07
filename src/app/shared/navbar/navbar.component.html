@@ -1,0 +1,11 @@
+<p-button (onClick)="goTo('panier')">
+  <i class="pi pi-shopping-cart"></i>
+  <span *ngIf="numberOfItem != 0">{{numberOfItem}}</span>
+</p-button>
+
+
+@if (this.isConnected) {
+  <p-button [link]="true" label="Se déconnecter" (onClick)="logout()"></p-button>
+} @else {
+  <p-button [link]="true" label="Se connecter" (onClick)="goTo('login')"></p-button>
+}
