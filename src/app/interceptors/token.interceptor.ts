@@ -1,21 +1,9 @@
-// import { HttpInterceptorFn } from '@angular/common/http';
-
-// export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-//   return next(req);
-// };
 import { HttpEvent, HttpHandler, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, next: HttpHandlerFn) => {
-  // let token : string = localStorage.getItem("accessToken") ?? ""
-  // if(token != "") {
-  //   let clone : any = req.clone({headers : req.headers.set('Authorization', 'bearer '+ token)})
-  //   return next(clone);
-  // }
-  // return next(req);
-
   const accessToken = localStorage.getItem('accessToken');
 
   if (accessToken) {
@@ -24,6 +12,7 @@ export const tokenInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, n
 
   return next(request).pipe(
     catchError((error) => {
+      console.log(error);
       // Check if the error is due to an expired access token
       if (error.status === 401 && accessToken) {
         console.log("error 401")
