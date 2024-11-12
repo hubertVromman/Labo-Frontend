@@ -2,8 +2,12 @@ import { HttpEvent, HttpHandler, HttpHandlerFn, HttpInterceptorFn, HttpRequest }
 import { inject } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 export const tokenInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, next: HttpHandlerFn) => {
+  const _auth = inject(AuthService);
+  const _router = inject(Router);
+
   const accessToken = localStorage.getItem('accessToken');
 
   if (accessToken) {
@@ -16,7 +20,7 @@ export const tokenInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, n
       // Check if the error is due to an expired access token
       if (error.status === 401 && accessToken) {
         console.log("error 401")
-        return handleTokenExpired(request, next);
+        return handleTokenExpired(request, next, _auth, _router);
       }
 
       return throwError(error);
@@ -33,10 +37,7 @@ function addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
   });
 }
 
-function handleTokenExpired(request: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> {
-
-  const _auth = inject(AuthService);
-
+function handleTokenExpired(request: HttpRequest<any>, next: HttpHandlerFn, _auth: AuthService, _router: Router): Observable<HttpEvent<any>> {
   // Call the refresh token endpoint to get a new access token
   return _auth.refreshTokens().pipe(
     switchMap(() => {
@@ -45,6 +46,7 @@ function handleTokenExpired(request: HttpRequest<any>, next: HttpHandlerFn): Obs
       return next(addToken(request, newAccessToken));
     }),
     catchError((error) => {
+      _router.navigate(["login"]);
       // Handle refresh token error (e.g., redirect to login page)
       console.error('Error handling expired access token:', error);
       return throwError(error);
