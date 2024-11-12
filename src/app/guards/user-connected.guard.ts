@@ -9,6 +9,6 @@ export const userConnectedGuard: CanActivateFn = (route, state) => {
     return true
   }
   console.log(router)
-  router.navigate(["login"], {queryParams:{'redirectURL':state.url}});
+  router.navigate(["login"], {queryParams:{'redirectURL': state.url}});
   return false;
 };

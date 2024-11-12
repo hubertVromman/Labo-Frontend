@@ -8,4 +8,54 @@
   </p>
 }
 
-<p-button label="refresh" (onClick)="handleClick()"></p-button>
+@if (prets$ | async; as prets) {
+  <p-table [value]="prets"
+    styleClass="p-datatable-striped"
+    [tableStyle]="{ 'min-width': '50%' }"
+    [scrollable]="true" 
+    scrollHeight="90vh"
+    [expandedRowKeys]="expandedRows"
+    dataKey="pretId"
+  >
+    <ng-template pTemplate="header">
+        <tr>
+          <th></th>
+          <th>Date d'emprunt</th>
+          <th>date de retour</th>
+          <th>Options</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-pret let-expanded="expanded">
+        <tr>
+          <td>
+            <p-button type="button" pRipple [pRowToggler]="pret" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+          </td>
+          <td>{{ pret.dateDebut }}</td>
+          <td>{{ pret.dateFin }}</td>
+          <td>Rendre</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-pret>
+      <tr>
+          <td colspan="2">
+              <div class="p-3">
+                  <p-table [value]="pret.pretLivre">
+                      <ng-template pTemplate="header">
+                          <tr>
+                            <th>Titre</th>
+                            <th>Quantite</th>
+                          </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-pretLivre>
+                          <tr>
+                              <td>{{ pretLivre.livre.titre }}</td>
+                              <td>{{ pretLivre.quantite }}</td>
+                          </tr>
+                      </ng-template>
+                  </p-table>
+              </div>
+          </td>
+      </tr>
+    </ng-template>
+  </p-table>
+}

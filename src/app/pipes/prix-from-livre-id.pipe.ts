@@ -4,14 +4,15 @@ import { map, Observable } from 'rxjs';
 import { Livre } from '../models/livre.model';
 
 @Pipe({
-  name: 'titreFromLivreId',
+  name: 'prixFromLivreId',
   standalone: true
 })
-export class TitreFromLivreIdPipe implements PipeTransform {
+export class PrixFromLivreIdPipe implements PipeTransform {
 
   ls = inject(LivreService);
 
-  transform(value: number, ...args: unknown[]): Observable<string> {
-    return this.ls.get(value).pipe(map((l: Livre) => l.titre));
+  transform(value: number, ...args: unknown[]): Observable<number> {
+    return this.ls.get(value).pipe(map((l: Livre) => l.prixVente));
   }
+
 }

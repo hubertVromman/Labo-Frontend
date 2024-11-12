@@ -1,32 +1,10 @@
 <h1>Panier</h1>
 
 <h3>
-  Prets
+  Emprunts
 </h3>
 
-<p-table [value]="listeAchat"
-styleClass="p-datatable-striped"
-[tableStyle]="{ 'min-width': '50%' }"
-[scrollable]="true" 
-scrollHeight="90vh" 
->
-  <ng-template pTemplate="header">
-      <tr>
-          <th>Titre</th>
-          <th>Quantité</th>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-achat>
-      <tr>
-          <td>{{ achat[0] | titreFromLivreId | async }}</td>
-          <td>{{ achat[1] }}</td>
-      </tr>
-  </ng-template>
-</p-table>
-
-<h3>
-  Achats
-</h3>
+<p-button label="Passer la commande des emprunts" (onClick)="executeCommand('pret')" [disabled]="listePret.length == 0"></p-button>
 
 <p-table [value]="listePret"
 styleClass="p-datatable-striped"
@@ -38,12 +16,71 @@ scrollHeight="90vh"
       <tr>
           <th>Titre</th>
           <th>Quantité</th>
+          <th>Options</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-pret>
+      <tr>
+          <td>{{ pret[0] | titreFromLivreId | async }}</td>
+          <td>
+            <p-button label="-" (onClick)="diminuerQuantite(-1, pret[0], 'pret')" />
+            {{ pret[1] }}
+            <p-button label="+" (onClick)="ajouterQuantite(-1, pret[0], 'pret')" />
+          </td>
+          <td>
+            <p-button (onClick)="supprimerDuPanier(-1, pret[0], 'pret')">
+              <i class="pi pi-trash"></i>
+            </p-button>
+          </td>
+      </tr>
+  </ng-template>
+</p-table>
+
+<h3>
+  Achats
+</h3>
+
+<p-button label="Passer la commande des achats" (onClick)="executeCommand('vente')" [disabled]="listeAchat.length == 0"></p-button>
+
+<p-table [value]="listeAchat"
+styleClass="p-datatable-striped"
+[tableStyle]="{ 'min-width': '50%' }"
+[scrollable]="true" 
+scrollHeight="90vh" 
+>
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Titre</th>
+          <th>Quantité</th>
+          <th>Prix unitaire</th>
+          <th>Prix total</th>
+          <th>Options</th>
       </tr>
   </ng-template>
   <ng-template pTemplate="body" let-achat>
       <tr>
           <td>{{ achat[0] | titreFromLivreId | async }}</td>
-          <td>{{ achat[1] }}</td>
+          <td>
+            <p-button label="-" (onClick)="diminuerQuantite(-1, achat[0], 'vente')" />
+            {{ achat[1] }}
+            <p-button label="+" (onClick)="ajouterQuantite(-1, achat[0], 'vente')" />
+          </td>
+          <td>{{ achat[0] | prixFromLivreId | async | currency:'EUR' }}</td>
+          <td>{{ achat[0] | prixFromLivreId | async | multiply:achat[1] | currency:'EUR' }}</td>
+          <td>
+            <p-button (onClick)="supprimerDuPanier(-1, achat[0], 'vente')">
+              <i class="pi pi-trash"></i>
+            </p-button>
+          </td>
       </tr>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>{{totalPrice | currency:'EUR'}}</td>
+      <td></td>
+    </tr>
   </ng-template>
 </p-table>

@@ -1,0 +1,13 @@
+sup {
+
+    font-size: 0.75em; /* Adjusts the font size */
+
+    vertical-align: super; /* Positions the text as superscript */
+
+    display: inline-block;
+    background-color: red;
+    color: white;
+    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+}

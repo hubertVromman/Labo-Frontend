@@ -15,7 +15,7 @@ Livres en stock :
           <th>Titre</th>
           <th>ISBN</th>
           <th>Stock location</th>
-          <th>Stock achat</th>
+          <th>Stock vente</th>
           <th>Options</th>
       </tr>
   </ng-template>
@@ -38,7 +38,7 @@ Livres en stock :
       <li> Genre(s) : {{ livreDetails.genre }} </li>
       <li> Prix de vente : {{ livreDetails.prixVente }} </li>
     </ul>
-    <p-button label="Ajouter au panier d'achat" (onClick)="ajouterAuPanier(livreDetails.livreId, 'vente')"></p-button>
     <p-button label="Ajouter au panier d'emprunt" (onClick)="ajouterAuPanier(livreDetails.livreId, 'pret')"></p-button>
+    <p-button label="Ajouter au panier d'achat" (onClick)="ajouterAuPanier(livreDetails.livreId, 'vente')"></p-button>
   </p-card>
 }

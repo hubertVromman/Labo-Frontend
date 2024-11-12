@@ -1,11 +1,17 @@
+<p-button (onClick)="goTo('home')" icon="pi pi-home">
+</p-button>
+
 <p-button (onClick)="goTo('panier')">
   <i class="pi pi-shopping-cart"></i>
-  <span *ngIf="numberOfItem != 0">{{numberOfItem}}</span>
+  <sup *ngIf="numberOfItem != 0">{{numberOfItem}}</sup>
 </p-button>
 
 
 @if (this.isConnected) {
+  @if (user$ | async; as user) {
+    <p-button [link]="true" (onClick)="goTo('profile')" [label]="user.prenom + ' ' + user.nom"></p-button>
+  }
   <p-button [link]="true" label="Se déconnecter" (onClick)="logout()"></p-button>
 } @else {
-  <p-button [link]="true" label="Se connecter" (onClick)="goTo('login')"></p-button>
+  <p-button [link]="true" label="Se connecter" (onClick)="goTo('login', true)"></p-button>
 }

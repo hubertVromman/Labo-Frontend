@@ -24,25 +24,22 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this._auth.login({
-    //   email : "hello@gmail.com",
-    //   motDePasse: "1234"
-    // })
-  }
-
-  onSubmit () {
-    if (this.loginForm.invalid) return;
-
     this._auth.isConnectedSubject.subscribe({
       next: data => {
         if (data) {
           const params = this._ar.snapshot.queryParams;
-          if (params['redirectURL'])
-            this._router.navigate([params['redirectURL']])
-          this._router.navigate(["home"]);
+          if (params['redirectURL']) {
+            this._router.navigate(params['redirectURL'].split('/'));
+          } else {
+            this._router.navigate(["home"]);
+          }
         }
       }
     });
+  }
+
+  onSubmit () {
+    if (this.loginForm.invalid) return;
 
     this._auth.login(this.loginForm.value);
   }
