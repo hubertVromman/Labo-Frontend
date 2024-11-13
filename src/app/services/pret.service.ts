@@ -16,4 +16,8 @@ export class PretService {
   getByUser() : Observable<Pret[]> {
     return this._client.get<Pret[]>(`${this.url}/Pret/ParUtilisateur`);
   }
+
+  rendre(pretId: number) : Observable<number> {
+    return this._client.post<number>(`${this.url}/Pret/Rendre/${pretId}`, {});
+  }
 }

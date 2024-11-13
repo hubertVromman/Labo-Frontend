@@ -23,7 +23,7 @@ export const tokenInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, n
         return handleTokenExpired(request, next, _auth, _router);
       }
 
-      return throwError(error);
+      return throwError(() => error);
     })
   );
     
@@ -46,10 +46,11 @@ function handleTokenExpired(request: HttpRequest<any>, next: HttpHandlerFn, _aut
       return next(addToken(request, newAccessToken));
     }),
     catchError((error) => {
+      _auth.logout();
       _router.navigate(["login"]);
       // Handle refresh token error (e.g., redirect to login page)
       console.error('Error handling expired access token:', error);
-      return throwError(error);
+      return throwError(() => error);
     })
   );
 }

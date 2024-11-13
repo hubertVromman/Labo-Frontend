@@ -1,41 +1,65 @@
-
 <h3>
   {{bibliotheque.nom}}
 </h3>
 
+<form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+  @if (genres$ | async; as genres) {
+    <p-dropdown
+      [options]="genres"
+      formControlName="genre"
+      optionLabel="nomGenre"
+      placeholder="Choisir un genre"
+      [showClear]="true"
+    />
+  }
+  @if (auteurs$ | async; as auteurs) {
+    <p-autoComplete
+      formControlName="auteur"
+      [suggestions]="filteredAuteurs"
+      (completeMethod)="updateSuggestion($event)"
+      placeholder="Choisir un auteur"
+    />
+  }
+  <p-button type="ngSubmit" label="Filtrer"></p-button>
+</form>
+
+
 Livres en stock :
-<p-table [value]="bibliotheque.stockLivre"
-  styleClass="p-datatable-striped"
-  [tableStyle]="{ 'min-width': '50%' }"
-  [scrollable]="true" 
-  scrollHeight="90vh" 
-  >
+<p-table [value]="bibliotheque.stockLivre" styleClass="p-datatable-striped" [tableStyle]="{ 'min-width': '50%' }"
+  [scrollable]="true" scrollHeight="90vh">
   <ng-template pTemplate="header">
-      <tr>
-          <th>Titre</th>
-          <th>ISBN</th>
-          <th>Stock location</th>
-          <th>Stock vente</th>
-          <th>Options</th>
-      </tr>
+    <tr>
+      <th>Titre</th>
+      <th>ISBN</th>
+      <th>Stock location</th>
+      <th>Stock vente</th>
+      <th>Options</th>
+    </tr>
   </ng-template>
   <ng-template pTemplate="body" let-stocklivre>
+    @if (
+      (livresToShow.length == 0 && livresToShow2.length == 0)
+      || (livresToShow.includes(stocklivre.livre.livreId) && livresToShow2.length == 0)
+      || (livresToShow.length == 0 && livresToShow2.includes(stocklivre.livre.livreId))
+      || (livresToShow.includes(stocklivre.livre.livreId) && livresToShow2.includes(stocklivre.livre.livreId))
+    ) {
       <tr>
-          <td>{{ stocklivre.livre.titre }}</td>
-          <td>{{ stocklivre.livre.isbn }}</td>
-          <td>{{ stocklivre.stockLocation }}</td>
-          <td>{{ stocklivre.stockAchat }}</td>
-          <td><p-button label="Détails" (onClick)="showDetails(stocklivre.livre.livreId)" /></td>
+        <td>{{ stocklivre.livre.titre }}</td>
+        <td>{{ stocklivre.livre.isbn }}</td>
+        <td>{{ stocklivre.stockLocation }}</td>
+        <td>{{ stocklivre.stockAchat }}</td>
+        <td><p-button label="Détails" (onClick)="showDetails(stocklivre.livre.livreId)" /></td>
       </tr>
+    }
   </ng-template>
 </p-table>
 
 @if (livreDetails) {
-  <p-card [header]="livreDetails.titre" [subheader]="auteurs">
+  <p-card [header]="livreDetails.titre" [subheader]="livreDetails.auteurs.map(getFullName).join(', ')">
     <ul>
       <li> ISBN : {{ livreDetails.isbn }} </li>
-      <li> Date de parution : {{ livreDetails.dateParution }} </li>
-      <li> Genre(s) : {{ livreDetails.genre }} </li>
+      <li> Date de parution : {{ livreDetails.dateParution | date }} </li>
+      <li> Genre : {{ livreDetails.genre }} </li>
       <li> Prix de vente : {{ livreDetails.prixVente }} </li>
     </ul>
     <p-button label="Ajouter au panier d'emprunt" (onClick)="ajouterAuPanier(livreDetails.livreId, 'pret')"></p-button>

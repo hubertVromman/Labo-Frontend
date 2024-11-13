@@ -1,0 +1,18 @@
+<div class="grid">
+
+  <div class="col-8">
+
+  </div>
+
+  <div class="col-4">
+    <form [formGroup]="livreForm" (ngSubmit)="onSubmit()">
+      <button (click)="addInput()">Ajouter un input</button>
+      <div #auteurs>
+        @for(auteurInput of auteurInputs; track $index) {
+          <input [formControlName]="auteurInput" />
+        }
+      </div>
+      <button type="ngSubmit">Envoyer</button>
+    </form>
+  </div>
+</div>

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { NavbarComponent } from "../../shared/navbar/navbar.component";
-import { SharedModule } from '../../shared/shared.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [NavbarComponent, SharedModule],
+  imports: [SharedModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -38,7 +37,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit () {
+  onSubmit() {
     if (this.loginForm.invalid) return;
 
     this._auth.login(this.loginForm.value);

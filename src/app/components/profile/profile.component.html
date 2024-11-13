@@ -8,6 +8,8 @@
   </p>
 }
 
+<h2>Liste des emprunts</h2>
+
 @if (prets$ | async; as prets) {
   <p-table [value]="prets"
     styleClass="p-datatable-striped"
@@ -21,7 +23,8 @@
         <tr>
           <th></th>
           <th>Date d'emprunt</th>
-          <th>date de retour</th>
+          <th>Date de retour</th>
+          <th>Statut</th>
           <th>Options</th>
         </tr>
     </ng-template>
@@ -30,9 +33,10 @@
           <td>
             <p-button type="button" pRipple [pRowToggler]="pret" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
           </td>
-          <td>{{ pret.dateDebut }}</td>
-          <td>{{ pret.dateFin }}</td>
-          <td>Rendre</td>
+          <td>{{ pret.dateDebut | date }}</td>
+          <td>{{ pret.dateFin | date }}</td>
+          <td>{{ pret | statutFromPret }}</td>
+          <td><p-button label="Rendre" (onClick)="rendre(pret.pretId)" [disabled]="pret.estRendu" /></td>
         </tr>
     </ng-template>
     <ng-template pTemplate="rowexpansion" let-pret>
@@ -50,6 +54,64 @@
                           <tr>
                               <td>{{ pretLivre.livre.titre }}</td>
                               <td>{{ pretLivre.quantite }}</td>
+                          </tr>
+                      </ng-template>
+                  </p-table>
+              </div>
+          </td>
+      </tr>
+    </ng-template>
+  </p-table>
+}
+
+<h2>Liste des achats</h2>
+
+@if (achats$ | async; as achats) {
+  <p-table [value]="achats"
+    styleClass="p-datatable-striped"
+    [tableStyle]="{ 'min-width': '50%' }"
+    [scrollable]="true" 
+    scrollHeight="90vh"
+    [expandedRowKeys]="expandedRows"
+    dataKey="venteId"
+  >
+    <ng-template pTemplate="header">
+        <tr>
+          <th></th>
+          <th>Date d'achat</th>
+          <th>Prix total</th>
+          <th>Options</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-achat let-expanded="expanded">
+        <tr>
+          <td>
+            <p-button type="button" pRipple [pRowToggler]="achat" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+          </td>
+          <td>{{ achat.dateVente | date }}</td>
+          <td>{{ achat | prixTotalAchat | currency:'EUR' }}</td>
+          <td><p-button label="Imprimer reçu" /></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-achat>
+      <tr>
+          <td colspan="2">
+              <div class="p-3">
+                  <p-table [value]="achat.venteLivre">
+                      <ng-template pTemplate="header">
+                          <tr>
+                            <th>Titre</th>
+                            <th>Quantite</th>
+                            <th>Prix</th>
+                            <th>Prix total</th>
+                          </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-venteLivre>
+                          <tr>
+                              <td>{{ venteLivre.livre.titre }}</td>
+                              <td>{{ venteLivre.quantite }}</td>
+                              <td>{{ venteLivre.prixVente | currency:'EUR' }}</td>
+                              <td>{{ venteLivre.prixVente | multiply:venteLivre.quantite | currency:'EUR' }}</td>
                           </tr>
                       </ng-template>
                   </p-table>
