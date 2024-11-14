@@ -1,0 +1,28 @@
+<p-button [link]="true" label="S'enregistrer" (onClick)="showDialog()"></p-button>
+<p-dialog header="S'enregister" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+    <input pInputText type="text" placeholder="prenom" formControlName="prenom">
+    <br>
+    <input pInputText type="text" placeholder="nom" formControlName="nom">
+    <br>
+    <input pInputText type="email" placeholder="email" formControlName="email">
+    <br>
+    <p-floatLabel>
+      <input pInputText type="password" formControlName="motDePasse" (change)="checkPasswordMatch()">
+      <label for="motDePasse">Mot de passe</label>
+    </p-floatLabel>
+    <app-form-error [formGroup]="registerForm" controlName="motDePasse"></app-form-error>
+    <br>
+    <p-floatLabel>
+      <input pInputText type="password" formControlName="motDePasse2">
+      <label for="motDePasse2">Confirmation</label>
+    </p-floatLabel>
+    <app-form-error [formGroup]="registerForm" controlName="motDePasse2"></app-form-error>
+    <br>
+
+    <p-button type="ngSubmit" label="S'enregister" />
+    <p>Déja un compte ? <a (click)="ouvrirLogin()" href="javascript:void(0)">Se connecter</a></p>
+
+  </form>
+</p-dialog>

@@ -1,15 +1,17 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-export const userConnectedGuard: CanActivateFn = (route, state) => {
+export const adminConnectedGuard: CanActivateFn = async (route, state) => {
   const authService = inject(AuthService);
   let router : Router = inject(Router);
-  if (authService.isConnected) {
+  if (authService.isConnected && (await firstValueFrom(authService.getProfile())).role == 'Admin') {
     return true
   }
-  router.navigate(['home']);
   authService.logout();
-  authService.mustOpenLogin.next(true);
+  setTimeout(() =>
+    authService.mustOpenLogin.next(true)
+  );
   return false;
 };

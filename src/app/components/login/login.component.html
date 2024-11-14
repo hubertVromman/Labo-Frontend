@@ -1,6 +1,12 @@
+<p-button [link]="true" label="Se connecter" (onClick)="showDialog()"></p-button>
+<p-dialog header="Se connecter" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
 
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <input type="email" placeholder="email" formControlName="email">
-  <input type="password" placeholder="mot de passe" formControlName="motDePasse">
-  <button >Se connecter</button>
-</form>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <input pInputText type="email" placeholder="email" formControlName="email">
+    <br>
+    <input pInputText type="password" placeholder="mot de passe" formControlName="motDePasse">
+    <br>
+    <p-button type="ngSubmit" label="Se connecter" />
+    <p>Pas encore de compte ? <a (click)="ouvrirRegister()" href="javascript:void(0)">S'enregistrer</a></p>
+  </form>
+</p-dialog>

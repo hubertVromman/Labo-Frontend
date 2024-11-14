@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { PanierService } from '../../services/panier.service';
-import { Commande } from '../../models/commande.model';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { Observable } from 'rxjs';
+import { LoginComponent } from "../../components/login/login.component";
+import { RegisterComponent } from "../../components/register/register.component";
 import { User } from '../../models/user.model';
+import { AuthService } from '../../services/auth.service';
+import { PanierService } from '../../services/panier.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [ButtonModule, CommonModule],
+  imports: [ButtonModule, CommonModule, LoginComponent, RegisterComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -19,7 +20,7 @@ export class NavbarComponent {
 
   isConnected: boolean = false;
   numberOfItem: number = 0;
-  
+
   user$: Observable<User>;
 
   constructor(private _auth: AuthService, private _router: Router, private _ps: PanierService) {

@@ -1,18 +1,72 @@
+<p-splitter [style]="{ height: '300px' }" styleClass="mb-5">
+  <ng-template pTemplate>
+    <div class="col-8">
+      <ul>
+        @for (livre of livres; track $index) {
+          <li>{{livre.titre}} <p-button label="Modifier"></p-button></li>
+        }
+      </ul>
+    </div>
+  </ng-template>
+  <ng-template pTemplate>
+    <div class="col-4">
+      <form [formGroup]="livreForm" (ngSubmit)="onSubmit()">
+        <div #auteurs formGroupName="auteurs">
+          @for(auteurInput of auteurInputs; track $index) {
+            <div [formGroupName]="auteurInput">
+              <label>{{auteurInput}} : </label>
+              <p-autoComplete formControlName="prenom" placeholder="prénom"
+                [suggestions]="prenomSuggestions"
+                (completeMethod)="filterPrenom($event)"
+                (ngModelChange)="onChange($event, auteurInput)"
+              />
+              <p-autoComplete formControlName="nom" placeholder="nom"
+                [suggestions]="nomSuggestions"
+                (completeMethod)="filterNom($event)"
+                (ngModelChange)="onChange($event, auteurInput)"
+              />
+            </div>
+          }
+          <p-button outlined="true" type="button" (click)="addInput()" label="Ajouter un auteur" />
+        </div>
+        <p-button type="ngSubmit" label="Envoyer" />
+      </form>
+    </div>
+  </ng-template>
+</p-splitter>
+
+<!--
 <div class="grid">
 
   <div class="col-8">
-
+    <ul>
+      @for (livre of livres; track $index) {
+        <li>{{livre.titre}} <p-button label="Modifier"></p-button></li>
+      }
+    </ul>
   </div>
 
   <div class="col-4">
     <form [formGroup]="livreForm" (ngSubmit)="onSubmit()">
-      <button (click)="addInput()">Ajouter un input</button>
-      <div #auteurs>
+      <div #auteurs formGroupName="auteurs">
         @for(auteurInput of auteurInputs; track $index) {
-          <input [formControlName]="auteurInput" />
+          <div [formGroupName]="auteurInput">
+            <label>{{auteurInput}} : </label>
+            <p-autoComplete formControlName="prenom" placeholder="prénom"
+              [suggestions]="prenomSuggestions"
+              (completeMethod)="filterPrenom($event)"
+              (ngModelChange)="onChange($event, auteurInput)"
+            />
+            <p-autoComplete formControlName="nom" placeholder="nom"
+              [suggestions]="nomSuggestions"
+              (completeMethod)="filterNom($event)"
+              (ngModelChange)="onChange($event, auteurInput)"
+            />
+          </div>
         }
+        <p-button outlined="true" type="button" (click)="addInput()" label="Ajouter un auteur" />
       </div>
-      <button type="ngSubmit">Envoyer</button>
+      <p-button type="ngSubmit" label="Envoyer" />
     </form>
   </div>
-</div>
+</div> -->

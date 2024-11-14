@@ -16,6 +16,7 @@
     <p-autoComplete
       formControlName="auteur"
       [suggestions]="filteredAuteurs"
+      [forceSelection]="true"
       (completeMethod)="updateSuggestion($event)"
       placeholder="Choisir un auteur"
     />
