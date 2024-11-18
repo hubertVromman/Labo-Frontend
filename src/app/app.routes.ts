@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AdminComponent } from './components/admin/admin.component';
 import { AuteurComponent } from './components/admin/auteur/auteur.component';
+import { HomeAdminComponent } from './components/admin/home-admin/home-admin.component';
 import { LivreComponent } from './components/admin/livre/livre.component';
 import { BibliothequeComponent } from './components/bibliotheque/bibliotheque.component';
 import { ErrorComponent } from './components/error/error.component';
@@ -21,6 +22,10 @@ export const routes: Routes = [
   { path: "panier", component: PanierComponent },
   { path: 'admin', component: AdminComponent, canActivate: [adminConnectedGuard], canActivateChild: [adminConnectedGuard],
     children: [
+      {
+        path: '',
+        component: HomeAdminComponent,
+      },
       {
         path: 'auteur',
         component: AuteurComponent,
