@@ -13,6 +13,7 @@ import { userConnectedGuard } from './guards/user-connected.guard';
 import { auteursResolver } from './resolvers/auteurs.resolver';
 import { bibliothequeResolver } from './resolvers/bibliotheque.resolver';
 import { livresResolver } from './resolvers/livres.resolver';
+import { genresResolver } from './resolvers/genres.resolver';
 
 export const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -32,7 +33,7 @@ export const routes: Routes = [
       },
       {
         path: 'livre',
-        resolve: {livres: livresResolver, auteurs: auteursResolver},
+        resolve: {livres: livresResolver, auteurs: auteursResolver, genres: genresResolver},
         component: LivreComponent,
       },
       { path: "**", component: ErrorComponent },

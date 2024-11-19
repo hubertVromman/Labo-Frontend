@@ -1,39 +1,66 @@
-<p-splitter [style]="{ height: '300px' }" styleClass="mb-5">
-  <ng-template pTemplate>
-    <div class="col-8">
-      <ul>
-        @for (livre of livres; track $index) {
-          <li>{{livre.titre}} <p-button label="Modifier"></p-button></li>
-        }
-      </ul>
-    </div>
-  </ng-template>
-  <ng-template pTemplate>
-    <div class="col-4">
-      <form [formGroup]="livreForm" (ngSubmit)="onSubmit()">
-        <div #auteurs formGroupName="auteurs">
-          @for(auteurInput of auteurInputs; track $index) {
-            <div [formGroupName]="auteurInput">
-              <label>{{auteurInput}} : </label>
-              <p-autoComplete formControlName="prenom" placeholder="prénom"
-                [suggestions]="prenomSuggestions"
-                (completeMethod)="filterPrenom($event)"
-                (ngModelChange)="onChange($event, auteurInput)"
-              />
-              <p-autoComplete formControlName="nom" placeholder="nom"
-                [suggestions]="nomSuggestions"
-                (completeMethod)="filterNom($event)"
-                (ngModelChange)="onChange($event, auteurInput)"
-              />
-            </div>
+<div class="grid">
+  <p-card class="col-8">
+      <div >
+        <ul>
+          @for (livre of livres; track $index) {
+            <li>{{livre.titre}} <p-button label="Modifier"></p-button></li>
           }
-          <p-button outlined="true" type="button" (click)="addInput()" label="Ajouter un auteur" />
-        </div>
-        <p-button type="ngSubmit" label="Envoyer" />
-      </form>
-    </div>
-  </ng-template>
-</p-splitter>
+        </ul>
+      </div>
+  </p-card>
+
+  <p-card class="col-4">
+      <div >
+        <form [formGroup]="livreForm" (ngSubmit)="onSubmit()">
+          <p-floatLabel>
+            <input  type="text" pInputText formControlName="titre" />
+            <label for="titre">Titre</label>
+          </p-floatLabel>
+
+          <p-floatLabel>
+            <input  type="text" pInputText formControlName="isbn" />
+            <label for="isbn">ISBN</label>
+          </p-floatLabel>
+
+          <label for="dateParution">Date de parution</label>
+          <input  type="date" pInputDate formControlName="dateParution" />
+
+          <p-floatLabel>
+            <input  type="number" pInputDate formControlName="prixVente" />
+            <label for="prixVente">Prix de vente</label>
+          </p-floatLabel>
+
+          <p-autoComplete formControlName="genre" placeholder="genre"
+            [suggestions]="genreSuggestions"
+            (completeMethod)="filterGenre($event)"
+            [dropdown]="true"
+            (onBlur)="checkGenre()"
+          />
+          <span *ngIf="mustAddGenre"><i class="pi pi-"></i>Sera ajouté à la db à la validation</span>
+
+          <div #auteurs formGroupName="auteurs">
+            @for(auteurInput of auteurInputs; track $index) {
+              <div [formGroupName]="auteurInput">
+                <label>{{auteurInput}} : </label>
+                <p-autoComplete formControlName="prenom" placeholder="Prénom"
+                  [suggestions]="prenomSuggestions"
+                  (completeMethod)="filterPrenom($event)"
+                  (ngModelChange)="onChange($event, auteurInput)"
+                />
+                <p-autoComplete formControlName="nom" placeholder="Nom"
+                  [suggestions]="nomSuggestions"
+                  (completeMethod)="filterNom($event)"
+                  (ngModelChange)="onChange($event, auteurInput)"
+                />
+              </div>
+            }
+            <p-button outlined="true" type="button" (click)="addInput()" label="Ajouter un auteur" />
+          </div>
+          <p-button type="ngSubmit" label="Envoyer" />
+        </form>
+      </div>
+  </p-card>
+</div>
 
 <!--
 <div class="grid">
