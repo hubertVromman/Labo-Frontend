@@ -1,7 +1,13 @@
-// .col8 {
-//   background-color: red;
-// }
+label {
+  width: 150px;
+  display: inline-block;
+}
 
-// .col4 {
-//   background-color: blue;
-// }
+app-form-error {
+  display: block;
+  margin-left: 150px;
+}
+
+.adjustWithLabel {
+  margin-left: 150px;
+}

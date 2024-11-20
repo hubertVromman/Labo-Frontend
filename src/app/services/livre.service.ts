@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environment';
+import { LivreForm } from '../models/livre-form.model';
 import { Livre } from '../models/livre.model';
 
 @Injectable({
@@ -21,4 +22,7 @@ export class LivreService {
     return this._client.get<Livre>(`${this.url}/Livre/${id}`)
   }
 
+  create(l: LivreForm): Observable<number> {
+    return this._client.post<number>(`${this.url}/Livre`, l);
+  }
 }

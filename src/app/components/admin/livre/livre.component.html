@@ -1,5 +1,5 @@
 <div class="grid">
-  <p-card class="col-8">
+  <p-card class="col-6">
       <div >
         <ul>
           @for (livre of livres; track $index) {
@@ -9,56 +9,107 @@
       </div>
   </p-card>
 
-  <p-card class="col-4">
-      <div >
+  <p-card class="col-6">
         <form [formGroup]="livreForm" (ngSubmit)="onSubmit()">
-          <p-floatLabel>
-            <input  type="text" pInputText formControlName="titre" />
-            <label for="titre">Titre</label>
-          </p-floatLabel>
 
-          <p-floatLabel>
-            <input  type="text" pInputText formControlName="isbn" />
-            <label for="isbn">ISBN</label>
-          </p-floatLabel>
+          <div>
+            <label for="titre">Titre </label>
+            <input
+              pInputText
+              type="text"
+              formControlName="titre"
+              placeholder="Titre"
+              [class.ng-dirty]="getControl(['titre']).touched"
+            />
+            <app-form-error [formGroup]="livreForm" controlName="titre"></app-form-error>
+          </div>
 
-          <label for="dateParution">Date de parution</label>
-          <input  type="date" pInputDate formControlName="dateParution" />
+          <div>
+            <label for="isbn">ISBN </label>
+            <input
+              pInputText
+              type="text"
+              formControlName="isbn"
+              placeholder="ISBN"
+              [class.ng-dirty]="getControl(['isbn']).touched"
+            />
+            <app-form-error [formGroup]="livreForm" controlName="isbn"></app-form-error>
+          </div>
 
-          <p-floatLabel>
-            <input  type="number" pInputDate formControlName="prixVente" />
-            <label for="prixVente">Prix de vente</label>
-          </p-floatLabel>
+          <div>
+            <label for="dateParution">Date de parution </label>
+            <p-inputMask
+              mask="99/99/9999"
+              placeholder="dd/mm/yyyy"
+              formControlName="dateParution"
+              slotChar="dd/mm/yyyy"
+              [class.ng-dirty]="getControl(['dateParution']).touched"
+            />
+            <app-form-error [formGroup]="livreForm" controlName="dateParution"></app-form-error>
+          </div>
 
-          <p-autoComplete formControlName="genre" placeholder="genre"
-            [suggestions]="genreSuggestions"
-            (completeMethod)="filterGenre($event)"
-            [dropdown]="true"
-            (onBlur)="checkGenre()"
-          />
-          <span *ngIf="mustAddGenre"><i class="pi pi-"></i>Sera ajouté à la db à la validation</span>
+          <div>
+            <label for="prixVente">Prix de vente </label>
+            <p-inputNumber
+              mode="currency"
+              inputId="currency-belgium"
+              currency="EUR"
+              type="number"
+              formControlName="prixVente"
+              placeholder="Prix"
+              [class.ng-dirty]="getControl(['prixVente']).touched"
+            />
+            <app-form-error [formGroup]="livreForm" controlName="prixVente"></app-form-error>
+          </div>
+
+          <div>
+            <label for="genre">Genre </label>
+            <p-autoComplete formControlName="genre" placeholder="Genre"
+              [suggestions]="genreSuggestions"
+              (completeMethod)="filterGenre($event)"
+              [dropdown]="true"
+              (onBlur)="checkGenre()"
+              [class.ng-dirty]="getControl(['genre']).touched"
+            />
+            <app-form-error [formGroup]="livreForm" controlName="genre"></app-form-error>
+            <div class="adjustWithLabel" *ngIf="genreStatut == 'toAddInDB'"><i class="pi pi-exclamation-triangle" style="color: orange"></i> Sera ajouté à la db à la validation</div>
+            <div class="adjustWithLabel" *ngIf="genreStatut == 'presentInDB'"><i class="pi pi-check" style="color: green"></i> Déjà dans la db</div>
+          </div>
 
           <div #auteurs formGroupName="auteurs">
             @for(auteurInput of auteurInputs; track $index) {
               <div [formGroupName]="auteurInput">
-                <label>{{auteurInput}} : </label>
+                <label>Auteur {{$index + 1}} </label>
                 <p-autoComplete formControlName="prenom" placeholder="Prénom"
+                  [class.ng-invalid]="getControl(['auteurs', auteurInput, 'prenom']).invalid"
+                  [class.ng-dirty]="getControl(['auteurs', auteurInput, 'prenom']).touched"
+                  [formControl]="getControl(['auteurs', auteurInput, 'prenom'])"
                   [suggestions]="prenomSuggestions"
                   (completeMethod)="filterPrenom($event)"
                   (ngModelChange)="onChange($event, auteurInput)"
+                  (onBlur)="checkAuteur(auteurInput)"
                 />
                 <p-autoComplete formControlName="nom" placeholder="Nom"
+                  [class.ng-invalid]="getControl(['auteurs', auteurInput, 'nom']).invalid"
+                  [class.ng-dirty]="getControl(['auteurs', auteurInput, 'nom']).touched"
+                  [formControl]="getControl(['auteurs', auteurInput, 'nom'])"
                   [suggestions]="nomSuggestions"
                   (completeMethod)="filterNom($event)"
                   (ngModelChange)="onChange($event, auteurInput)"
+                  (onBlur)="checkAuteur(auteurInput)"
                 />
+                <p-button icon="pi pi-trash" (click)="deleteAuteurField(auteurInput)"></p-button>
+                <app-form-error [formGroup]="livreForm" [subFormGroup]="['auteurs', auteurInput]" controlName="prenom"></app-form-error>
+                <app-form-error [formGroup]="livreForm" [subFormGroup]="['auteurs', auteurInput]" controlName="nom"></app-form-error>
+                <div class="adjustWithLabel" *ngIf="auteurStatut[auteurInput] == 'toAddInDB'"><i class="pi pi-exclamation-triangle" style="color: orange"></i> Sera ajouté à la db à la validation</div>
+                <div class="adjustWithLabel" *ngIf="auteurStatut[auteurInput] == 'presentInDB'"><i class="pi pi-check" style="color: green"></i> Déjà dans la db</div>
               </div>
             }
             <p-button outlined="true" type="button" (click)="addInput()" label="Ajouter un auteur" />
           </div>
-          <p-button type="ngSubmit" label="Envoyer" />
+          <p-button [disabled]="livreForm.invalid" type="ngSubmit" label="Envoyer" />
+          <!-- <p-button type="ngSubmit" label="Envoyer" /> -->
         </form>
-      </div>
   </p-card>
 </div>
 

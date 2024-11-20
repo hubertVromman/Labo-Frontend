@@ -13,8 +13,12 @@ export class FormErrorComponent {
 
   @Input() formGroup: FormGroup | undefined;
   @Input() controlName: string | undefined;
+  @Input() subFormGroup: string[] | undefined;
 
   get ctrl() {
+    if (this.subFormGroup) {
+      return this.formGroup?.get([...this.subFormGroup, this.controlName] as string[]);
+    }
     return this.formGroup?.get(this.controlName!);
   }
 }

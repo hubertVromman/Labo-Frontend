@@ -21,4 +21,8 @@ export class AuteurService {
   get(id: number): Observable<AuteurDetail> {
     return this._client.get<AuteurDetail>(`${this.url}/Auteur/${id}`)
   }
+
+  create(a: Auteur): Observable<number> {
+    return this._client.post<number>(`${this.url}/Auteur`, a);
+  }
 }
