@@ -6,7 +6,7 @@ export interface Bibliotheque {
   stockLivre: StockLivre[]
 }
 
-interface StockLivre {
+export interface StockLivre {
   livre: Livre
   stockLocation: number
   stockAchat: number

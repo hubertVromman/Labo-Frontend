@@ -1,0 +1,25 @@
+
+
+@for (sl of bibliotheque.stockLivre; track $index) {
+  <form [formGroup]="stockForms[$index]" (ngSubmit)="onModifySubmit($index)">
+    <div [formGroupName]="sl.livre.livreId">
+      {{ sl.livre.titre }}
+      <p-inputNumber formControlName="stockLocation"></p-inputNumber>
+      <p-inputNumber formControlName="stockAchat"></p-inputNumber>
+      <p-button type="ngSubmit" label="Valider"></p-button>
+    </div>
+  </form>
+}
+
+Ajouter un livre en stock
+<form [formGroup]="newStockForm" (ngSubmit)="onAddSubmit()">
+  <p-dropdown 
+    formControlName="livre" 
+    [options]="livres"
+    optionLabel="titre"
+    placeholder="Choisir un livre"
+  />
+  <p-inputNumber formControlName="stockLocation"></p-inputNumber>
+  <p-inputNumber formControlName="stockAchat"></p-inputNumber>
+  <p-button type="ngSubmit" label="Ajouter"></p-button>
+</form>

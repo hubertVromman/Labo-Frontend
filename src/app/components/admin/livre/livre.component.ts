@@ -22,11 +22,12 @@ import { validDateValidator } from '../../../validators/date.validator';
 import { validISBNValidator } from '../../../validators/isbn.validator';
 import { validPriceValidator } from '../../../validators/number.validator';
 import { FormErrorComponent } from "../../form-error/form-error.component";
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-livre',
   standalone: true,
-  imports: [ReactiveFormsModule, AutoCompleteModule, ButtonModule, CardModule, FloatLabelModule, CommonModule, InputTextModule, InputNumberModule, InputMaskModule, FormErrorComponent],
+  imports: [ReactiveFormsModule, AutoCompleteModule, ButtonModule, CardModule, FloatLabelModule, CommonModule, InputTextModule, InputNumberModule, InputMaskModule, FormErrorComponent, DialogModule],
   templateUrl: './livre.component.html',
   styleUrl: './livre.component.scss'
 })
@@ -78,7 +79,6 @@ export class LivreComponent {
   async onSubmit() {
     if (this.livreForm.invalid) return;
 
-    console.log(this.livreForm.value);
     let auteurIds: number[] = [];
     let genreId;
     let promises: Promise<number>[] = [];

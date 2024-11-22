@@ -14,6 +14,7 @@ import { auteursResolver } from './resolvers/auteurs.resolver';
 import { bibliothequeResolver } from './resolvers/bibliotheque.resolver';
 import { livresResolver } from './resolvers/livres.resolver';
 import { genresResolver } from './resolvers/genres.resolver';
+import { BibliothequeAdminComponent } from './components/admin/bibliotheque-admin/bibliotheque-admin.component';
 
 export const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -35,6 +36,11 @@ export const routes: Routes = [
         path: 'livre',
         resolve: {livres: livresResolver, auteurs: auteursResolver, genres: genresResolver},
         component: LivreComponent,
+      },
+      {
+        path: 'bibliotheque/:id', 
+        resolve: {bibliotheque: bibliothequeResolver, livres: livresResolver},// auteurs: auteursResolver, genres: genresResolver},
+        component: BibliothequeAdminComponent,
       },
       { path: "**", component: ErrorComponent },
     ],
