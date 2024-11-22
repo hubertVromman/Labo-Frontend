@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideHttpClient(withInterceptors([tokenInterceptor, dateInterceptor]), withInterceptorsFromDi()),
     provideAnimations(),
-    {provide: LOCALE_ID, useValue: 'fr-BE' },
+    { provide: LOCALE_ID, useValue: 'fr-BE' },
     //{provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true},
   ],  
 };

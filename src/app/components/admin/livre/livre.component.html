@@ -60,6 +60,7 @@
               formControlName="prixVente"
               placeholder="Prix"
               [class.ng-dirty]="getControl(['prixVente']).touched"
+              locale="fr-BE"
             />
             <app-form-error [formGroup]="livreForm" controlName="prixVente"></app-form-error>
           </div>
