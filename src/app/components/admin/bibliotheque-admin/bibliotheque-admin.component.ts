@@ -20,6 +20,7 @@ export class BibliothequeAdminComponent {
 
   bibliotheque: Bibliotheque;
   livres: Livre[];
+  allLivres: Livre[];
   // livreNames: string[];
 
   stockForms: FormGroup[] = [];
@@ -27,7 +28,8 @@ export class BibliothequeAdminComponent {
 
   constructor(private _ar: ActivatedRoute, private fb: FormBuilder, private _bs: BibliothequeService) {
     this.bibliotheque = this._ar.snapshot.data['bibliotheque'];
-    this.livres = this._ar.snapshot.data['livres'].filter((l: Livre) => {
+    this.allLivres = this._ar.snapshot.data['livres']
+    this.livres = this.allLivres.filter((l: Livre) => {
       return !this.bibliotheque.stockLivre.map(sl => sl.livre.livreId).includes(l.livreId);
     });
 
@@ -37,22 +39,20 @@ export class BibliothequeAdminComponent {
       stockAchat: [null, []],
     });
 
-    this.bibliotheque.stockLivre.forEach(sl => {
+    this.stockForms = this.bibliotheque.stockLivre.map(sl => 
       this.addControl(sl)
-    })
+    );
   }
 
   addControl(sl: StockLivre) {
-    this.stockForms.push(
-      new FormGroup({
-        [sl.livre.livreId]: new FormGroup({
-          livreId: new FormControl(sl.livre.livreId, []),
-          bibliothequeId: new FormControl(this.bibliotheque.bibliothequeId, []),
-          stockAchat: new FormControl(sl.stockAchat, []),
-          stockLocation: new FormControl(sl.stockLocation, []),
-        })
+    return new FormGroup({
+      [sl.livre.livreId]: new FormGroup({
+        livreId: new FormControl(sl.livre.livreId, []),
+        bibliothequeId: new FormControl(this.bibliotheque.bibliothequeId, []),
+        stockAchat: new FormControl(sl.stockAchat, []),
+        stockLocation: new FormControl(sl.stockLocation, []),
       })
-    )
+    })
   }
 
   onModifySubmit(index: number) {
@@ -81,12 +81,28 @@ export class BibliothequeAdminComponent {
       form.value.bibliothequeId = this.bibliotheque.bibliothequeId;
       
       this._bs.setStock(form.value).subscribe({
-        next: data => alert("ok"),
+        next: data => this.updateList(),
         error: error => {
           console.log(error)
           alert(error.error.title)
         }
       });
     }
+  }
+
+  updateList(): void {
+    this._ar.params.subscribe({
+      next: data => this._bs.getWithStock(+data['id']).subscribe({
+        next: data => {
+          this.bibliotheque = data;
+          this.livres = this.allLivres.filter((l: Livre) => {
+            return !this.bibliotheque.stockLivre.map(sl => sl.livre.livreId).includes(l.livreId);
+          });
+          this.stockForms = this.bibliotheque.stockLivre.map(sl => 
+            this.addControl(sl)
+          );
+        }
+      })
+    });
   }
 }

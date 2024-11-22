@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -50,7 +50,7 @@ export class LivreComponent {
   AuteurNumber: number = 0;
   auteurInputs: string[] = []
 
-  constructor(private fb: FormBuilder, private _ar: ActivatedRoute, private _as: AuteurService, private _gs: GenreService, private _ls: LivreService) {
+  constructor(private fb: FormBuilder, private _ar: ActivatedRoute, private _as: AuteurService, private _gs: GenreService, private _ls: LivreService, private router: Router) {
     this.livres = this._ar.snapshot.data['livres'];
     this.auteurs = this._ar.snapshot.data['auteurs'];
     this.genres = this._ar.snapshot.data['genres'];
@@ -74,6 +74,12 @@ export class LivreComponent {
 
   addInput() {
     this.createAuteurFormGroup();
+  }
+
+  updateList() {
+    this._ls.getAll().subscribe({
+      next: data => this.livres = data
+    });
   }
 
   async onSubmit() {
@@ -102,7 +108,7 @@ export class LivreComponent {
       genreId = this.genres.find(g => g.nomGenre == this.livreForm.value.genre)!.genreId;
     }
     auteurIds.push(...await Promise.all(promises));
-    this.livreForm.value.isbn = this.livreForm.value.isbn.replaceAll('-', '').trim();
+    this.livreForm.value.isbn = this.livreForm.value.isbn?.replaceAll('-', '').trim();
 
     this._ls.create({
       titre: this.livreForm.value.titre,
@@ -112,7 +118,7 @@ export class LivreComponent {
       genreId,
       auteursId: auteurIds
     } as LivreForm).subscribe({
-      next: data => console.log(data)
+      next: () => this.updateList()
     })
   }
 
@@ -175,8 +181,6 @@ export class LivreComponent {
   }
 
   checkGenre() {
-    console.log('here');
-
 
     if (this.livreForm.get('genre')?.invalid) {
       this.genreStatut = '';
